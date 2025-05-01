@@ -3,7 +3,7 @@ services:
     image: postgres
     container_name: doctor-office-db
     environment:
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
       PG_DATA: ${DB_DATA}

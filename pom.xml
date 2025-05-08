@@ -28,6 +28,7 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <apache-commons-collections.version>4.5.0</apache-commons-collections.version>
     </properties>
     <dependencies>
         <dependency>
@@ -71,6 +72,11 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${apache-commons-collections.version}</version>
         </dependency>
     </dependencies>
 

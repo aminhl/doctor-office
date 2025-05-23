@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 public class BaseAudit {
 
     @CreatedDate
-    @Column(name = "creation_date", nullable = false, insertable = false, updatable = false)
+    @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
     @LastModifiedDate
-    @Column(name = "modification_date", insertable = false)
+    @Column(name = "modification_date")
     private LocalDateTime modificationDate;
 
 }

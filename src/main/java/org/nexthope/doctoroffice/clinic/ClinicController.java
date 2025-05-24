@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-
+import static java.time.Instant.now;
 import static org.nexthope.doctoroffice.clinic.ClinicConstants.*;
 import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_BASE_URL;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(API_BASE_URL + CLINICS_ENDPOINT)
@@ -27,10 +27,21 @@ public class ClinicController {
                 .message(CLINIC_CREATED_MESSAGE)
                 .data(clinicDTO)
                 .statusCode(HttpStatus.CREATED)
-                .timestamp(Instant.now())
+                .timestamp(now())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
+    @DeleteMapping(value = "/{clinicId}")
+    public ResponseEntity<ApiResponse<Object>> deleteClinic(@PathVariable Long clinicId) {
+        clinicService.deleteClinic(clinicId);
+        ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
+                .success(true)
+                .message(CLINIC_DELETED_MESSAGE)
+                .statusCode(OK)
+                .timestamp(now())
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
 
 }

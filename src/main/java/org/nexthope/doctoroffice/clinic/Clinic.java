@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.nexthope.doctoroffice.commons.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Accessors(chain = true)
 public class Clinic extends BaseAudit {
 
     @Id

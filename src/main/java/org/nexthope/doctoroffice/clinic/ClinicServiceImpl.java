@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -23,8 +26,7 @@ public class ClinicServiceImpl implements ClinicService {
         if (clinicExists) {
             log.warn("createClinic - Aborted: Clinic already exists [name: {}, address: {}, city: {}]",
                     clinic.getName(), clinic.getAddress(), clinic.getCity());
-            // TODO: more explicit exception
-            throw new IllegalArgumentException("Clinic already exists");
+            throw new ClinicAlreadyExistsException("Clinic " + clinic.getName() + " already exists", CONFLICT);
         }
         var clinicSaved = clinicRepository.save(clinic);
         ClinicDTO clinicDTO = clinicMapper.toDto(clinicSaved);
@@ -38,8 +40,7 @@ public class ClinicServiceImpl implements ClinicService {
         boolean clinicExists = clinicRepository.existsById(clinicId);
         if (!clinicExists) {
             log.warn("deleteClinic - Not Found: Clinic with id [{}] does not exist", clinicId);
-            // TODO: more explicit exception
-            throw new IllegalArgumentException("Clinic does not exist");
+            throw new ClinicNotFoundException("Clinic with id " + clinicId + " not found", NOT_FOUND);
         }
         clinicRepository.deleteById(clinicId);
         log.info("deleteClinic - Success: Clinic deleted with id [{}]", clinicId);

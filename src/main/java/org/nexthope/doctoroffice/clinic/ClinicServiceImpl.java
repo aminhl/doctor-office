@@ -47,25 +47,25 @@ public class ClinicServiceImpl implements ClinicService {
         log.debug("deleteClinic - END");
     }
 
-    public Page<Clinic> getAllClinics(Pageable pageable) {
+    public Page<ClinicDTO> getAllClinics(Pageable pageable) {
         log.debug("findAllClinics - START: Fetching clinics with page number [{}], page size [{}], sort [{}]",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
-        Page<Clinic> result = clinicRepository.findAll(pageable);
+        Page<ClinicDTO> result = clinicRepository.findAll(pageable)
+                .map(clinicMapper::toDto);
         log.info("findAllClinics - Success: Retrieved [{}] clinics (page {} of {})",
                 result.getNumberOfElements(), result.getNumber() + 1, result.getTotalPages());
         log.debug("findAllClinics - END");
         return result;
     }
 
-    public Clinic getClinic(Long clinicId) {
+    public ClinicDTO getClinic(Long clinicId) {
         log.debug("findClinicById - START: Fetching clinic with id [{}]", clinicId);
-        Clinic result = clinicRepository.findById(clinicId)
-                // TODO: more explicit exception
-                .orElseThrow(() -> new IllegalArgumentException("Clinic does not exist"));
+        ClinicDTO result = clinicRepository.findById(clinicId)
+                .map(clinicMapper::toDto)
+                .orElseThrow(() -> new ClinicNotFoundException("Clinic with id " + clinicId + " not found", NOT_FOUND));
         log.info("findClinicById - Success: Retrieved clinic with id [{}]", clinicId);
         log.debug("findClinicById - END");
         return result;
     }
-
 
 }

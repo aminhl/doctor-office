@@ -9,8 +9,8 @@ public interface ClinicService {
 
     void deleteClinic(Long clinicId);
 
-    Page<Clinic> getAllClinics(Pageable pageable);
+    Page<ClinicDTO> getAllClinics(Pageable pageable);
 
-    Clinic getClinic(Long clinicId);
+    ClinicDTO getClinic(Long clinicId);
 
 }

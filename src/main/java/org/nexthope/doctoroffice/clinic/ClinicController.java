@@ -2,6 +2,8 @@ package org.nexthope.doctoroffice.clinic;
 
 import lombok.RequiredArgsConstructor;
 import org.nexthope.doctoroffice.commons.ApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -42,6 +44,32 @@ public class ClinicController {
                 .timestamp(now())
                 .build();
         return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<ClinicDTO>>> getAllClinics(Pageable pageable) {
+        Page<ClinicDTO> page = clinicService.getAllClinics(pageable);
+        ApiResponse<Page<ClinicDTO>> response = ApiResponse.<Page<ClinicDTO>>builder()
+                .success(true)
+                .message(CLINICS_RETRIEVED_MESSAGE)
+                .statusCode(OK)
+                .data(page)
+                .timestamp(now())
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/{clinicId}")
+    public ResponseEntity<ApiResponse<ClinicDTO>> getClinic(@PathVariable Long clinicId) {
+        ClinicDTO clinic = clinicService.getClinic(clinicId);
+        ApiResponse<ClinicDTO> response = ApiResponse.<ClinicDTO>builder()
+                .success(true)
+                .message(CLINIC_RETRIEVED_MESSAGE)
+                .statusCode(OK)
+                .data(clinic)
+                .timestamp(now())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 }

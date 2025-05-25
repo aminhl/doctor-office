@@ -1,0 +1,54 @@
+package org.nexthope.doctoroffice.appointment;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.nexthope.doctoroffice.commons.BaseAudit;
+import org.nexthope.doctoroffice.user.User;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Getter
+@Setter
+@Entity(name = "appointment")
+public class Appointment extends BaseAudit {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private User doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private User patient;
+
+    @Column(name = "start_time", nullable = false)
+    private LocalDateTime startTime;
+
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
+
+    @Column(name = "notes", nullable = false)
+    private String notes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        return Objects.equals(id, that.id) && Objects.equals(doctor, that.doctor) && Objects.equals(patient, that.patient) && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime) && Objects.equals(notes, that.notes) && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, doctor, patient, startTime, endTime, notes, status);
+    }
+
+}

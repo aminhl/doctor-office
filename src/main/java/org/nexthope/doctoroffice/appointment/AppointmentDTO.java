@@ -10,6 +10,6 @@ public record AppointmentDTO(Long id,
                              LocalDateTime startTime,
                              LocalDateTime endTime,
                              String notes,
-                             Status appointmentStatus
+                             Status status
                              ) {
 }

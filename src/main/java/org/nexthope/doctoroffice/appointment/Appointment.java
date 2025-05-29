@@ -1,5 +1,6 @@
 package org.nexthope.doctoroffice.appointment;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,17 +13,19 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity(name = "appointment")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Appointment extends BaseAudit {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointment_seq")
+    @SequenceGenerator(name = "appointment_seq", sequenceName = "appointment_seq", allocationSize = 1)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "doctor_id")
     private User doctor;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "patient_id")
     private User patient;
 
@@ -32,7 +35,7 @@ public class Appointment extends BaseAudit {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @Column(name = "notes", nullable = false)
+    @Column(name = "notes", nullable = false, columnDefinition = "TEXT")
     private String notes;
 
     @Enumerated(EnumType.STRING)

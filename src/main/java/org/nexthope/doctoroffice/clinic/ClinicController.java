@@ -34,7 +34,7 @@ public class ClinicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @DeleteMapping(value = "/{clinicId}")
+    @DeleteMapping("/{clinicId}")
     public ResponseEntity<ApiResponse<Object>> deleteClinic(@PathVariable Long clinicId) {
         clinicService.deleteClinic(clinicId);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
@@ -59,7 +59,7 @@ public class ClinicController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/{clinicId}")
+    @GetMapping("/{clinicId}")
     public ResponseEntity<ApiResponse<ClinicDTO>> getClinic(@PathVariable Long clinicId) {
         ClinicDTO clinic = clinicService.getClinic(clinicId);
         ApiResponse<ClinicDTO> response = ApiResponse.<ClinicDTO>builder()

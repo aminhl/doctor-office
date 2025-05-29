@@ -25,7 +25,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 String.format("%s %s", appointment.getPatient().getFirstName(), appointment.getPatient().getLastName()), appointment.getStartTime(), appointment.getEndTime(), appointment.getStatus(), appointment.getNotes());
         boolean appointmentExists = appointmentRepository.existsByDoctorAndPatientAndStartTimeAndEndTime(appointment.getDoctor(), appointment.getPatient(),
                 appointment.getStartTime(), appointment.getEndTime());
-        if (!appointmentExists) {
+        if (appointmentExists) {
             log.warn("createAppointment - Aborted: Appointment already exists [doctor: {}, patient: {}, startTime: {}, endTime: {}, status: {}, notes: {}]",
                     String.format("%s %s", appointment.getDoctor().getFirstName(), appointment.getDoctor().getLastName()),
                     String.format("%s %s", appointment.getPatient().getFirstName(), appointment.getPatient().getLastName()), appointment.getStartTime(), appointment.getEndTime(), appointment.getStatus(), appointment.getNotes());

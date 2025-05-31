@@ -1,5 +1,6 @@
 package org.nexthope.doctoroffice.clinic;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.Objects;
 @Entity(name = "clinic")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "users")
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Clinic extends BaseAudit {
@@ -39,7 +40,7 @@ public class Clinic extends BaseAudit {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
-    @ToString.Exclude
+    @JsonBackReference
     private List<User> users;
 
     @Override

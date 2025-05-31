@@ -62,7 +62,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         log.info("getAllAppointments - Success: Retrieved appointments [{}] (page {} of {})",
                 result.getNumberOfElements(), result.getNumber(), result.getTotalPages());
         log.debug("getAllAppointments - End:");
-        return null;
+        return result;
     }
 
     @Override

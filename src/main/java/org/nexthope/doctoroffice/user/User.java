@@ -1,6 +1,7 @@
 package org.nexthope.doctoroffice.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,7 @@ public class User extends BaseAudit {
 
     @ManyToOne
     @JoinColumn(name = "clinic_id")
+    @JsonManagedReference
     private Clinic clinic;
 
     @Override

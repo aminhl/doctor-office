@@ -48,12 +48,12 @@ public class AppointmentController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<AppointmentDTO>>> getAllAppointments(Pageable pageable) {
-        Page<AppointmentDTO> appointmentDTOS = appointmentService.getAllAppointments(pageable);
+        Page<AppointmentDTO> page = appointmentService.getAllAppointments(pageable);
         ApiResponse<Page<AppointmentDTO>> apiResponse = ApiResponse.<Page<AppointmentDTO>>builder()
                 .success(true)
                 .message(APPOINTMENTS_RETRIEVED_MESSAGE)
-                .data(appointmentDTOS)
                 .statusCode(OK)
+                .data(page)
                 .timestamp(now())
                 .build();
         return ResponseEntity.ok(apiResponse);

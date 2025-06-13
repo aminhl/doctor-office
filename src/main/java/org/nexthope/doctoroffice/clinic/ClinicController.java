@@ -4,18 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.nexthope.doctoroffice.commons.ApiResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static java.time.Instant.now;
 import static org.nexthope.doctoroffice.clinic.ClinicConstants.*;
-import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_BASE_URL;
+import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_V1_PATH;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(API_BASE_URL + CLINICS_ENDPOINT)
+@RequestMapping(API_V1_PATH + CLINICS_ENDPOINT)
 @RequiredArgsConstructor
 public class ClinicController {
 
@@ -28,10 +28,10 @@ public class ClinicController {
                 .success(true)
                 .message(CLINIC_CREATED_MESSAGE)
                 .data(clinicSaved)
-                .statusCode(HttpStatus.CREATED)
+                .statusCode(CREATED)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        return ResponseEntity.status(CREATED).body(apiResponse);
     }
 
     @DeleteMapping("/{clinicId}")

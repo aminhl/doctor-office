@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 public record MedicalReportRecord(
         Long id,
-        User patient,
-        User doctor,
+        User patient, // TODO: UserRecord
+        User doctor, // TODO: UserRecord
         LocalDate date,
         String diagnosis,
         String treatment,

@@ -5,8 +5,8 @@ import org.nexthope.doctoroffice.user.User;
 import java.time.LocalDateTime;
 
 public record AppointmentRecord(Long id,
-                                User doctor,
-                                User patient,
+                                User doctor, // TODO: UserRecord
+                                User patient, // TODO: UserRecord
                                 LocalDateTime startTime,
                                 LocalDateTime endTime,
                                 String notes,

@@ -9,13 +9,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static java.time.Instant.now;
-import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_BASE_URL;
+import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_V1_PATH;
 import static org.nexthope.doctoroffice.medicalreport.MedicalReportConstants.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(API_BASE_URL + MEDICAL_REPORTS_ENDPOINT)
+@RequestMapping(API_V1_PATH + MEDICAL_REPORTS_ENDPOINT)
 @RequiredArgsConstructor
 public class MedicalReportController {
 

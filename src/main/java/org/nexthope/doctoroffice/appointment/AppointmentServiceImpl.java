@@ -60,7 +60,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Page<AppointmentRecord> result = appointmentRepository.findAll(pageable)
                 .map(Appointment::toRecord);
         log.info("getAllAppointments - Success: Retrieved appointments [{}] (page {} of {})",
-                result.getNumberOfElements(), result.getNumber(), result.getTotalPages());
+                result.getNumberOfElements(), result.getNumber()+1, result.getTotalPages());
         log.debug("getAllAppointments - End:");
         return result;
     }

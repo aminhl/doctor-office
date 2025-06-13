@@ -64,7 +64,8 @@ public class MedicalReportServiceImpl implements MedicalReportService {
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
         Page<MedicalReportRecord> MedicalReportRecordS = medicalReportRepository.findAll(pageable)
                 .map(MedicalReport::toRecord);
-        log.info("getAllMedicalRecords - Success: Retrieved medical records [{}] (page {} of {})", MedicalReportRecordS.getNumberOfElements(), MedicalReportRecordS.getNumber(), MedicalReportRecordS.getTotalPages() + 1);
+        log.info("getAllMedicalRecords - Success: Retrieved medical records [{}] (page {} of {})",
+                MedicalReportRecordS.getNumberOfElements(), MedicalReportRecordS.getNumber()+1, MedicalReportRecordS.getTotalPages() + 1);
         log.debug("getAllMedicalRecords - End");
         return MedicalReportRecordS;
     }

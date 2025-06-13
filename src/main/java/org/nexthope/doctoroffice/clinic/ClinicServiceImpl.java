@@ -16,7 +16,6 @@ public class ClinicServiceImpl implements ClinicService {
 
     private final ClinicRepository clinicRepository;
 
-
     public ClinicRecord createClinic(ClinicRecord clinicRecord) {
         log.debug("createClinic - Start: Attempting to create clinic [name: {}, address: {}, city: {}]",
                 clinicRecord.name(), clinicRecord.address(), clinicRecord.city());
@@ -46,23 +45,23 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     public Page<ClinicRecord> getAllClinics(Pageable pageable) {
-        log.debug("findAllClinics - Start: Fetching clinics with page number [{}], page size [{}], sort [{}]",
+        log.debug("getAllClinics - Start: Fetching clinics with page number [{}], page size [{}], sort [{}]",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
         Page<ClinicRecord> result = clinicRepository.findAll(pageable)
                 .map(Clinic::toRecord);
-        log.info("findAllClinics - Success: Retrieved [{}] clinics (page {} of {})",
-                result.getNumberOfElements(), result.getNumber() + 1, result.getTotalPages());
-        log.debug("findAllClinics - End");
+        log.info("getAllClinics - Success: Retrieved [{}] clinics (page {} of {})",
+                result.getNumberOfElements(), result.getNumber()+1, result.getTotalPages());
+        log.debug("getAllClinics - End");
         return result;
     }
 
     public ClinicRecord getClinic(Long clinicId) {
-        log.debug("findClinicById - Start: Fetching clinic with id [{}]", clinicId);
+        log.debug("getClinic - Start: Fetching clinic with id [{}]", clinicId);
         ClinicRecord result = clinicRepository.findById(clinicId)
                 .map(Clinic::toRecord)
                 .orElseThrow(() -> new ClinicNotFoundException("Clinic with id " + clinicId + " not found", NOT_FOUND));
-        log.info("findClinicById - Success: Retrieved clinic with id [{}]", clinicId);
-        log.debug("findClinicById - End");
+        log.info("getClinic - Success: Retrieved clinic with id [{}]", clinicId);
+        log.debug("getClinic - End");
         return result;
     }
 

@@ -5,12 +5,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface AppointmentService {
 
-    AppointmentDTO createAppointment(Appointment appointment);
+    AppointmentRecord createAppointment(AppointmentRecord appointmentRecord);
 
     void deleteAppointment(Long appointmentId);
 
-    Page<AppointmentDTO> getAllAppointments(Pageable pageable);
+    Page<AppointmentRecord> getAllAppointments(Pageable pageable);
 
-    AppointmentDTO getAppointment(Long appointmentId);
+    AppointmentRecord getAppointment(Long appointmentId);
 
 }

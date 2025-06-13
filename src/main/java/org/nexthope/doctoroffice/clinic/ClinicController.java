@@ -22,12 +22,12 @@ public class ClinicController {
     private final ClinicService clinicService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ClinicDTO>> createClinic(@RequestBody @Validated Clinic clinic) {
-        ClinicDTO clinicDTO = clinicService.createClinic(clinic);
-        ApiResponse<ClinicDTO> apiResponse = ApiResponse.<ClinicDTO>builder()
+    public ResponseEntity<ApiResponse<ClinicRecord>> createClinic(@RequestBody @Validated ClinicRecord clinicRecord) {
+        var clinicSaved = clinicService.createClinic(clinicRecord);
+        ApiResponse<ClinicRecord> apiResponse = ApiResponse.<ClinicRecord>builder()
                 .success(true)
                 .message(CLINIC_CREATED_MESSAGE)
-                .data(clinicDTO)
+                .data(clinicSaved)
                 .statusCode(HttpStatus.CREATED)
                 .timestamp(now())
                 .build();
@@ -47,9 +47,9 @@ public class ClinicController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ClinicDTO>>> getAllClinics(Pageable pageable) {
-        Page<ClinicDTO> page = clinicService.getAllClinics(pageable);
-        ApiResponse<Page<ClinicDTO>> response = ApiResponse.<Page<ClinicDTO>>builder()
+    public ResponseEntity<ApiResponse<Page<ClinicRecord>>> getAllClinics(Pageable pageable) {
+        Page<ClinicRecord> page = clinicService.getAllClinics(pageable);
+        ApiResponse<Page<ClinicRecord>> response = ApiResponse.<Page<ClinicRecord>>builder()
                 .success(true)
                 .message(CLINICS_RETRIEVED_MESSAGE)
                 .statusCode(OK)
@@ -60,9 +60,9 @@ public class ClinicController {
     }
 
     @GetMapping("/{clinicId}")
-    public ResponseEntity<ApiResponse<ClinicDTO>> getClinic(@PathVariable Long clinicId) {
-        ClinicDTO clinic = clinicService.getClinic(clinicId);
-        ApiResponse<ClinicDTO> response = ApiResponse.<ClinicDTO>builder()
+    public ResponseEntity<ApiResponse<ClinicRecord>> getClinic(@PathVariable Long clinicId) {
+        ClinicRecord clinic = clinicService.getClinic(clinicId);
+        ApiResponse<ClinicRecord> response = ApiResponse.<ClinicRecord>builder()
                 .success(true)
                 .message(CLINIC_RETRIEVED_MESSAGE)
                 .statusCode(OK)

@@ -5,12 +5,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface ClinicService {
 
-    ClinicDTO createClinic(Clinic clinic);
+    ClinicRecord createClinic(ClinicRecord clinicRecord);
 
     void deleteClinic(Long clinicId);
 
-    Page<ClinicDTO> getAllClinics(Pageable pageable);
+    Page<ClinicRecord> getAllClinics(Pageable pageable);
 
-    ClinicDTO getClinic(Long clinicId);
+    ClinicRecord getClinic(Long clinicId);
 
 }

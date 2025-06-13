@@ -22,12 +22,12 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AppointmentDTO>> createAppointment(@RequestBody @Validated Appointment appointment) {
-        AppointmentDTO appointmentDTO = appointmentService.createAppointment(appointment);
-        ApiResponse<AppointmentDTO> apiResponse = ApiResponse.<AppointmentDTO>builder()
+    public ResponseEntity<ApiResponse<AppointmentRecord>> createAppointment(@RequestBody @Validated AppointmentRecord appointmentRecord) {
+        var appointmentSaved = appointmentService.createAppointment(appointmentRecord);
+        ApiResponse<AppointmentRecord> apiResponse = ApiResponse.<AppointmentRecord>builder()
                 .success(true)
                 .message(APPOINTMENT_CREATED_MESSAGE)
-                .data(appointmentDTO)
+                .data(appointmentSaved)
                 .statusCode(CREATED)
                 .timestamp(now())
                 .build();
@@ -47,9 +47,9 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<AppointmentDTO>>> getAllAppointments(Pageable pageable) {
-        Page<AppointmentDTO> page = appointmentService.getAllAppointments(pageable);
-        ApiResponse<Page<AppointmentDTO>> apiResponse = ApiResponse.<Page<AppointmentDTO>>builder()
+    public ResponseEntity<ApiResponse<Page<AppointmentRecord>>> getAllAppointments(Pageable pageable) {
+        Page<AppointmentRecord> page = appointmentService.getAllAppointments(pageable);
+        ApiResponse<Page<AppointmentRecord>> apiResponse = ApiResponse.<Page<AppointmentRecord>>builder()
                 .success(true)
                 .message(APPOINTMENTS_RETRIEVED_MESSAGE)
                 .statusCode(OK)
@@ -60,12 +60,12 @@ public class AppointmentController {
     }
 
     @GetMapping("/{appointmentId}")
-    public ResponseEntity<ApiResponse<AppointmentDTO>> getAppointment(@PathVariable("appointmentId") Long appointmentId) {
-        AppointmentDTO appointmentDTO = appointmentService.getAppointment(appointmentId);
-        ApiResponse<AppointmentDTO> apiResponse = ApiResponse.<AppointmentDTO>builder()
+    public ResponseEntity<ApiResponse<AppointmentRecord>> getAppointment(@PathVariable("appointmentId") Long appointmentId) {
+        AppointmentRecord appointmentRecord = appointmentService.getAppointment(appointmentId);
+        ApiResponse<AppointmentRecord> apiResponse = ApiResponse.<AppointmentRecord>builder()
                 .success(true)
                 .message(APPOINTMENT_RETRIEVED_MESSAGE)
-                .data(appointmentDTO)
+                .data(appointmentRecord)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();

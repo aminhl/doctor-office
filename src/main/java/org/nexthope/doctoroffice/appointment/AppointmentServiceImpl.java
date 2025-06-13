@@ -16,28 +16,28 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
 
-    private final AppointmentMapper appointmentMapper;
-
     @Override
-    public AppointmentDTO createAppointment(Appointment appointment) {
+    public AppointmentRecord createAppointment(AppointmentRecord appointmentRecord) {
         log.debug("createAppointment - Start: Attempting to create appointment [doctor: {}, patient: {}, startTime: {}, endTime: {}, status: {}, notes: {}]",
-                String.format("%s %s", appointment.getDoctor().getFirstName(), appointment.getDoctor().getLastName()),
-                String.format("%s %s", appointment.getPatient().getFirstName(), appointment.getPatient().getLastName()), appointment.getStartTime(), appointment.getEndTime(), appointment.getStatus(), appointment.getNotes());
-        boolean appointmentExists = appointmentRepository.existsByDoctorAndPatientAndStartTimeAndEndTime(appointment.getDoctor(), appointment.getPatient(),
-                appointment.getStartTime(), appointment.getEndTime());
+                String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
+                String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
+                appointmentRecord.endTime(), appointmentRecord.status(), appointmentRecord.notes());
+        boolean appointmentExists = appointmentRepository.existsByDoctorAndPatientAndStartTimeAndEndTime(appointmentRecord.doctor(), appointmentRecord.patient(),
+                appointmentRecord.startTime(), appointmentRecord.endTime());
         if (appointmentExists) {
             log.warn("createAppointment - Aborted: Appointment already exists [doctor: {}, patient: {}, startTime: {}, endTime: {}, status: {}, notes: {}]",
-                    String.format("%s %s", appointment.getDoctor().getFirstName(), appointment.getDoctor().getLastName()),
-                    String.format("%s %s", appointment.getPatient().getFirstName(), appointment.getPatient().getLastName()), appointment.getStartTime(), appointment.getEndTime(), appointment.getStatus(), appointment.getNotes());
+                    String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
+                    String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
+                    appointmentRecord.endTime(), appointmentRecord.status(), appointmentRecord.notes());
             throw new AppointmentAlreadyExistsException("Appointment already exists", CONFLICT);
         }
-        var appointmentSaved = appointmentRepository.save(appointment);
-        AppointmentDTO appointmentDTO = appointmentMapper.toDto(appointmentSaved);
+        var appointmentSaved = appointmentRepository.save(appointmentRecord.toAppointment()).toRecord();
         log.info("createAppointment - Success: Appointment created [doctor: {}, patient: {}, startTime: {}, endTime: {}, status: {}, notes: {}]",
-                String.format("%s %s", appointment.getDoctor().getFirstName(), appointment.getDoctor().getLastName()),
-                String.format("%s %s", appointment.getPatient().getFirstName(), appointment.getPatient().getLastName()), appointment.getStartTime(), appointment.getEndTime(), appointment.getStatus(), appointment.getNotes());
+                String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
+                String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
+                appointmentRecord.endTime(), appointmentRecord.status(), appointmentRecord.notes());
         log.debug("createAppointment - End");
-        return appointmentDTO;
+        return appointmentSaved;
     }
 
     @Override
@@ -54,11 +54,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Page<AppointmentDTO> getAllAppointments(Pageable pageable) {
+    public Page<AppointmentRecord> getAllAppointments(Pageable pageable) {
         log.debug("getAllAppointments - Start: Fetching appointments with page number [{}], page size [{}], sort [{}]",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
-        Page<AppointmentDTO> result = appointmentRepository.findAll(pageable)
-                        .map(appointmentMapper::toDto);
+        Page<AppointmentRecord> result = appointmentRepository.findAll(pageable)
+                .map(Appointment::toRecord);
         log.info("getAllAppointments - Success: Retrieved appointments [{}] (page {} of {})",
                 result.getNumberOfElements(), result.getNumber(), result.getTotalPages());
         log.debug("getAllAppointments - End:");
@@ -66,11 +66,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentDTO getAppointment(Long appointmentId) {
+    public AppointmentRecord getAppointment(Long appointmentId) {
         log.debug("getAppointment - Start: Fetching appointment with id [{}]", appointmentId);
-        AppointmentDTO result = appointmentRepository.findById(appointmentId)
-                        .map(appointmentMapper::toDto)
-                        .orElseThrow(() -> new AppointmentNotFoundException(String.format("Appointment with id %s not found", appointmentId), NOT_FOUND));
+        AppointmentRecord result = appointmentRepository.findById(appointmentId)
+                .map(Appointment::toRecord)
+                .orElseThrow(() -> new AppointmentNotFoundException(String.format("Appointment with id %s not found", appointmentId), NOT_FOUND));
         log.info("getAppointment - Success: Retrieved appointment with id [{}]", appointmentId);
         log.debug("getAppointment - End");
         return result;

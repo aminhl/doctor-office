@@ -10,14 +10,15 @@ import lombok.experimental.Accessors;
 import org.nexthope.doctoroffice.commons.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "clinic")
 @Getter
 @Setter
-@ToString(exclude = "users")
 @Accessors(chain = true)
+@ToString(exclude = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Clinic extends BaseAudit {
 
@@ -54,4 +55,19 @@ public class Clinic extends BaseAudit {
     public int hashCode() {
         return Objects.hash(id, name, address, city, phoneNumber, users);
     }
+
+    public Clinic setCreationDate(LocalDateTime creationDate) {
+        super.setCreationDate(creationDate);
+        return this;
+    }
+
+    public Clinic setModificationDate(LocalDateTime modificationDate) {
+        super.setModificationDate(modificationDate);
+        return this;
+    }
+
+    public ClinicRecord toRecord() {
+        return new ClinicRecord(id, name, address, city, phoneNumber, getCreationDate(), getModificationDate());
+    }
+
 }

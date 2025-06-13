@@ -6,8 +6,8 @@ import org.nexthope.doctoroffice.appointment.AppointmentNotFoundException;
 import org.nexthope.doctoroffice.clinic.ClinicAlreadyExistsException;
 import org.nexthope.doctoroffice.clinic.ClinicNotFoundException;
 import org.nexthope.doctoroffice.commons.ApiResponse;
-import org.nexthope.doctoroffice.medicalrecord.MedicalRecordAlreadyExistsException;
-import org.nexthope.doctoroffice.medicalrecord.MedicalRecordNotFoundException;
+import org.nexthope.doctoroffice.medicalreport.MedicalReportAlreadyExistsException;
+import org.nexthope.doctoroffice.medicalreport.MedicalReportNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,8 +66,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getErrorCode()).body(apiResponse);
     }
 
-    @ExceptionHandler(MedicalRecordAlreadyExistsException.class)
-    public ResponseEntity<ApiResponse<Object>> handleMedicalRecordAlreadyExistsException(MedicalRecordAlreadyExistsException e) {
+    @ExceptionHandler(MedicalReportAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Object>> handleMedicalRecordAlreadyExistsException(MedicalReportAlreadyExistsException e) {
         log.error("MedicalRecordAlreadyExistsException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
@@ -78,8 +78,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getErrorCode()).body(apiResponse);
     }
 
-    @ExceptionHandler(MedicalRecordNotFoundException.class)
-    public ResponseEntity<Object> handleMedicalRecordNotFoundException(MedicalRecordNotFoundException e) {
+    @ExceptionHandler(MedicalReportNotFoundException.class)
+    public ResponseEntity<Object> handleMedicalRecordNotFoundException(MedicalReportNotFoundException e) {
         log.error("MedicalRecordNotFoundException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)

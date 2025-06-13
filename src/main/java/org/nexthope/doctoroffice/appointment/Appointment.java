@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.nexthope.doctoroffice.commons.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 @Entity(name = "appointment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Appointment extends BaseAudit {
@@ -52,6 +54,20 @@ public class Appointment extends BaseAudit {
     @Override
     public int hashCode() {
         return Objects.hash(id, doctor, patient, startTime, endTime, notes, status);
+    }
+
+    public Appointment setCreationDate(LocalDateTime creationDate) {
+        super.setCreationDate(creationDate);
+        return this;
+    }
+
+    public Appointment setModificationDate(LocalDateTime modificationDate) {
+        super.setModificationDate(modificationDate);
+        return this;
+    }
+
+    public AppointmentRecord toRecord() {
+        return new AppointmentRecord(id, doctor, patient, startTime, endTime, notes, status, getCreationDate(), getModificationDate());
     }
 
 }

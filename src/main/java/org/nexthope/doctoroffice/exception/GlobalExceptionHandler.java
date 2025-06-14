@@ -8,6 +8,7 @@ import org.nexthope.doctoroffice.clinic.ClinicNotFoundException;
 import org.nexthope.doctoroffice.commons.ApiResponse;
 import org.nexthope.doctoroffice.medicalreport.MedicalReportAlreadyExistsException;
 import org.nexthope.doctoroffice.medicalreport.MedicalReportNotFoundException;
+import org.nexthope.doctoroffice.notification.NotificationNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -81,6 +82,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MedicalReportNotFoundException.class)
     public ResponseEntity<Object> handleMedicalRecordNotFoundException(MedicalReportNotFoundException e) {
         log.error("MedicalRecordNotFoundException occurred: {}", e.getMessage(), e);
+        ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
+                .success(false)
+                .message(e.getMessage())
+                .statusCode(e.getErrorCode())
+                .timestamp(now())
+                .build();
+        return ResponseEntity.status(e.getErrorCode()).body(apiResponse);
+    }
+
+    @ExceptionHandler(NotificationNotFoundException.class)
+    public ResponseEntity<Object> handleNotificationNotFoundException(NotificationNotFoundException e) {
+        log.error("NotificationNotFoundException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
                 .message(e.getMessage())

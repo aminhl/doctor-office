@@ -30,7 +30,7 @@ class ClinicServiceImplTest {
     private ClinicServiceImpl clinicService;
 
     @Test
-    void testCreateClinic_WithValidClinic_ShouldReturnClinicDto() {
+    void testCreateClinic_withValidClinic_shouldReturnClinicRecord() {
         // Given
         ClinicRecord clinicRecord = new Clinic()
                 .setId(1L)
@@ -53,7 +53,7 @@ class ClinicServiceImplTest {
     }
 
     @Test
-    void testCreateClinic_WithExistingClinic_ShouldThrowClinicAlreadyExistsException() {
+    void testCreateClinic_withExistingClinic_shouldThrowClinicAlreadyExistsException() {
         // Given
         ClinicRecord clinicRecord = new Clinic()
                 .setId(1L)
@@ -74,7 +74,7 @@ class ClinicServiceImplTest {
     }
 
     @Test
-    void testDeleteClinic_WithNoExistingClinic_ShouldThrowClinicNotFoundException() {
+    void testDeleteClinic_withNoExistingClinic_shouldThrowClinicNotFoundException() {
         // Given
         Long clinicId = 1L;
         when(clinicRepository.existsById(clinicId)).thenReturn(false);
@@ -87,7 +87,7 @@ class ClinicServiceImplTest {
     }
 
     @Test
-    void testDeleteClinic_WithExistingClinic_ShouldDeleteClinic() {
+    void testDeleteClinic_withExistingClinic_shouldDeleteClinic() {
         // Given
         Long clinicId = 1L;
         when(clinicRepository.existsById(clinicId)).thenReturn(true);
@@ -98,7 +98,7 @@ class ClinicServiceImplTest {
     }
 
     @Test
-    void testGetAllClinics_WithNoEmptyClinics_ShouldReturnNoEmptyPageOfClinicDto() {
+    void testGetAllClinics_withNoEmptyClinics_shouldReturnNoEmptyPageOfClinicRecord() {
         Clinic clinic1 = new Clinic();
         Clinic clinic2 = new Clinic();
         clinic1.setId(1L)
@@ -128,7 +128,7 @@ class ClinicServiceImplTest {
     }
 
     @Test
-    void testGetAllClinics_WithEmptyClinics_ShouldReturnEmptyPageOfClinicDto() {
+    void testGetAllClinics_withEmptyClinics_shouldReturnEmptyPageOfClinicRecord() {
         // Given
         List<Clinic> clinics = Collections.emptyList();
         PageRequest pageRequest = PageRequest.of(0, 10);
@@ -142,7 +142,7 @@ class ClinicServiceImplTest {
     }
 
     @Test
-    void testGetClinic_WithExistingClinic_ShouldReturnClinicDto() {
+    void testGetClinic_withExistingClinic_shouldReturnClinicRecord() {
         // Given
         Clinic clinic = new Clinic();
         Long clinicId = 1L;
@@ -152,17 +152,17 @@ class ClinicServiceImplTest {
                 .setCity("city_1")
                 .setPhoneNumber("0123456789")
                 .setCreationDate(now());
-        ClinicRecord clinicDTO = new ClinicRecord(1L, "clinic_1", "address_1", "city_1", "0123456789", now(), null);
+        ClinicRecord clinicRecord = new ClinicRecord(1L, "clinic_1", "address_1", "city_1", "0123456789", now(), null);
         when(clinicRepository.findById(clinicId)).thenReturn(Optional.of(clinic));
         // When
         ClinicRecord result = clinicService.getClinic(clinicId);
         // Then
         assertNotNull(result);
-        assertEquals(clinicDTO, result);
+        assertEquals(clinicRecord, result);
     }
 
     @Test
-    void testGetClinic_WithNoExistingClinic_ShouldThrowClinicNotFoundException() {
+    void testGetClinic_withNoExistingClinic_shouldThrowClinicNotFoundException() {
         // Given
         Long clinicId = 1L;
         when(clinicRepository.findById(clinicId)).thenReturn(Optional.empty());
@@ -171,6 +171,6 @@ class ClinicServiceImplTest {
         // Then
         assertEquals("Clinic with id " + clinicId + " not found", exception.getMessage());
         assertEquals(NOT_FOUND, exception.getErrorCode());
-    }
+        }
 
 }

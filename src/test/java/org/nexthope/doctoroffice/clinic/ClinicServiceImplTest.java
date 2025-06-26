@@ -23,7 +23,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @ExtendWith(MockitoExtension.class)
 class ClinicServiceImplTest {
 
-    /*@Mock
+    @Mock
     private ClinicRepository clinicRepository;
 
     @InjectMocks
@@ -32,46 +32,45 @@ class ClinicServiceImplTest {
     @Test
     void testCreateClinic_WithValidClinic_ShouldReturnClinicDto() {
         // Given
-        Clinic clinic = new Clinic();
-        clinic.setId(1L)
+        ClinicRecord clinicRecord = new Clinic()
+                .setId(1L)
                 .setName("clinic_1")
                 .setAddress("address_1")
                 .setCity("city_1")
                 .setPhoneNumber("0123456789")
-                .setCreationDate(now());
-        ClinicDTO clinicDTO = new ClinicDTO(1L, "clinic_1", "address_1", "city_1", "0123456789", now(), null);
-        when(clinicRepository.existsByNameAndAddressAndCity(clinic.getName(), clinic.getAddress(), clinic.getCity())).thenReturn(false);
+                .setCreationDate(now())
+                .toRecord();
+        Clinic clinic = clinicRecord.toClinic();
+        when(clinicRepository.existsByNameAndAddressAndCity(clinicRecord.name(), clinicRecord.address(), clinicRecord.city()))
+                .thenReturn(false);
         when(clinicRepository.save(clinic)).thenReturn(clinic);
-        when(clinicMapper.toDto(clinic)).thenReturn(clinicDTO);
         // When
-        ClinicDTO result = clinicService.createClinic(clinic);
+        ClinicRecord result = clinicService.createClinic(clinicRecord);
         // Then
         assertNotNull(result);
-        verify(clinicRepository).existsByNameAndAddressAndCity(clinic.getName(), clinic.getAddress(), clinic.getCity());
-        verify(clinicMapper).toDto(clinic);
         verify(clinicRepository).save(clinic);
-        assertEquals(clinicDTO, result);
+        assertEquals(clinicRecord, result);
     }
 
     @Test
     void testCreateClinic_WithExistingClinic_ShouldThrowClinicAlreadyExistsException() {
         // Given
-        Clinic clinic = new Clinic();
-        clinic.setId(1L)
+        ClinicRecord clinicRecord = new Clinic()
+                .setId(1L)
                 .setName("clinic_1")
                 .setAddress("address_1")
                 .setCity("city_1")
                 .setPhoneNumber("0123456789")
-                .setCreationDate(now());
-        when(clinicRepository.existsByNameAndAddressAndCity(clinic.getName(), clinic.getAddress(), clinic.getCity())).thenReturn(true);
+                .setCreationDate(now())
+                .toRecord();
+        when(clinicRepository.existsByNameAndAddressAndCity(clinicRecord.name(), clinicRecord.address(), clinicRecord.city()))
+                .thenReturn(true);
         // When
-        ClinicAlreadyExistsException exception = assertThrows(ClinicAlreadyExistsException.class, () -> clinicService.createClinic(clinic));
+        ClinicAlreadyExistsException exception = assertThrows(ClinicAlreadyExistsException.class, () -> clinicService.createClinic(clinicRecord));
         // Then
-        assertEquals("Clinic " + clinic.getName() + " already exists", exception.getMessage());
+        assertEquals("Clinic " + clinicRecord.name() + " already exists", exception.getMessage());
         assertEquals(CONFLICT, exception.getErrorCode());
-        verify(clinicRepository).existsByNameAndAddressAndCity(clinic.getName(), clinic.getAddress(), clinic.getCity());
-        verify(clinicRepository, never()).save(clinic);
-        verify(clinicMapper, never()).toDto(clinic);
+        verify(clinicRepository, never()).save(clinicRecord.toClinic());
     }
 
     @Test
@@ -84,7 +83,6 @@ class ClinicServiceImplTest {
         // Then
         assertEquals("Clinic with id " + clinicId + " not found", exception.getMessage());
         assertEquals(NOT_FOUND, exception.getErrorCode());
-        verify(clinicRepository).existsById(clinicId);
         verify(clinicRepository, never()).deleteById(clinicId);
     }
 
@@ -96,7 +94,6 @@ class ClinicServiceImplTest {
         // When
         clinicService.deleteClinic(clinicId);
         // Then
-        verify(clinicRepository).existsById(clinicId);
         verify(clinicRepository).deleteById(clinicId);
     }
 
@@ -120,19 +117,14 @@ class ClinicServiceImplTest {
         PageRequest pageRequest = PageRequest.of(0, 10);
         Page<Clinic> clinicsPage = new PageImpl<>(clinics, pageRequest, clinics.size());
         when(clinicRepository.findAll(pageRequest)).thenReturn(clinicsPage);
-        when(clinicMapper.toDto(any(Clinic.class))).thenAnswer(invocation -> {
-            Clinic clinic = invocation.getArgument(0);
-            return new ClinicDTO(clinic.getId(), clinic.getName(), clinic.getAddress(), clinic.getCity(), clinic.getPhoneNumber(), clinic.getCreationDate(), clinic.getModificationDate());
-        });
         // When
-        Page<ClinicDTO> result = clinicService.getAllClinics(pageRequest);
+        Page<ClinicRecord> result = clinicService.getAllClinics(pageRequest);
         // Then
         assertNotNull(result);
         assertThat(result.getContent().size()).isEqualTo(clinics.size());
         assertThat(result.getContent().get(0).name()).isEqualTo(clinic1.getName());
         assertThat(result.getContent().get(1).name()).isEqualTo(clinic2.getName());
         verify(clinicRepository).findAll(pageRequest);
-        verify(clinicMapper, times(clinics.size())).toDto(any(Clinic.class));
     }
 
     @Test
@@ -143,11 +135,10 @@ class ClinicServiceImplTest {
         Page<Clinic> clinicsPage = new PageImpl<>(clinics, pageRequest, 0);
         when(clinicRepository.findAll(pageRequest)).thenReturn(clinicsPage);
         // When
-        Page<ClinicDTO> result = clinicService.getAllClinics(pageRequest);
+        Page<ClinicRecord> result = clinicService.getAllClinics(pageRequest);
         assertNotNull(result);
         assertThat(result.getContent().size()).isEqualTo(0);
         verify(clinicRepository).findAll(pageRequest);
-        verify(clinicMapper, never()).toDto(any(Clinic.class));
     }
 
     @Test
@@ -161,15 +152,12 @@ class ClinicServiceImplTest {
                 .setCity("city_1")
                 .setPhoneNumber("0123456789")
                 .setCreationDate(now());
-        ClinicDTO clinicDTO = new ClinicDTO(1L, "clinic_1", "address_1", "city_1", "0123456789", now(), null);
+        ClinicRecord clinicDTO = new ClinicRecord(1L, "clinic_1", "address_1", "city_1", "0123456789", now(), null);
         when(clinicRepository.findById(clinicId)).thenReturn(Optional.of(clinic));
-        when(clinicMapper.toDto(clinic)).thenReturn(clinicDTO);
         // When
-        ClinicDTO result = clinicService.getClinic(clinicId);
+        ClinicRecord result = clinicService.getClinic(clinicId);
         // Then
         assertNotNull(result);
-        verify(clinicRepository).findById(clinicId);
-        verify(clinicMapper).toDto(clinic);
         assertEquals(clinicDTO, result);
     }
 
@@ -183,8 +171,6 @@ class ClinicServiceImplTest {
         // Then
         assertEquals("Clinic with id " + clinicId + " not found", exception.getMessage());
         assertEquals(NOT_FOUND, exception.getErrorCode());
-        verify(clinicRepository).findById(clinicId);
-        verify(clinicMapper, never()).toDto(any(Clinic.class));
-    }*/
+    }
 
 }

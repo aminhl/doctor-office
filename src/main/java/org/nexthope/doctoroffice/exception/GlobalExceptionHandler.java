@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         log.error("ClinicAlreadyExistsException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         log.error("ClinicNotFoundException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
         log.error("AppointmentAlreadyExistsException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
         log.error("AppointmentNotFoundException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
         log.error("MedicalRecordAlreadyExistsException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
         log.error("MedicalRecordNotFoundException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();
@@ -96,7 +96,7 @@ public class GlobalExceptionHandler {
         log.error("NotificationNotFoundException occurred: {}", e.getMessage(), e);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(false)
-                .message(e.getMessage())
+                .errorMessage(e.getMessage())
                 .statusCode(e.getErrorCode())
                 .timestamp(now())
                 .build();

@@ -2,6 +2,9 @@ package org.nexthope.doctoroffice.medicalreport;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.nexthope.doctoroffice.commons.PaginationRequest;
+import org.nexthope.doctoroffice.commons.PaginationUtils;
+import org.nexthope.doctoroffice.commons.PagingResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,66 +20,69 @@ public class MedicalReportServiceImpl implements MedicalReportService {
 
     private final MedicalReportRepository medicalReportRepository;
 
-
     @Override
-    public MedicalReportRecord createMedicalRecord(MedicalReportRecord medicalReportRecord) {
-        log.debug("createMedicalRecord - Start: Attempting to create medical record [patient: {}, doctor: {}, date: {}, diagnosis: {}, treatment: {}, prescription: {}, notes: {}]",
+    public MedicalReportRecord createMedicalReport(MedicalReportRecord medicalReportRecord) {
+        log.debug("createMedicalRecord - Start: Attempting to create medical report { patient:{}, doctor:{}, date:{} }",
                 format("%s %s", medicalReportRecord.patient().getFirstName(), medicalReportRecord.patient().getLastName()),
                 format("%s %s", medicalReportRecord.doctor().getFirstName(), medicalReportRecord.doctor().getLastName()),
-                medicalReportRecord.date(), medicalReportRecord.diagnosis(), medicalReportRecord.treatment(),
-                medicalReportRecord.prescription(), medicalReportRecord.notes());
+                medicalReportRecord.date());
         boolean medicalRecordExists = medicalReportRepository.existsByPatientAndDoctorAndDate(medicalReportRecord.patient(),
                 medicalReportRecord.doctor(), medicalReportRecord.date());
         if (medicalRecordExists) {
-            log.warn("createMedicalRecord - Aborted: Medical record already exists [patient: {}, doctor: {}, date: {}, diagnosis: {}, treatment: {}, prescription: {}, notes: {}]",
+            log.warn("createMedicalRecord - Aborted: Medical report already exists { patient:{}, doctor:{}, date:{} }",
                     format("%s %s", medicalReportRecord.patient().getFirstName(), medicalReportRecord.patient().getLastName()), format("%s %s", medicalReportRecord.doctor().getFirstName(),
-                            medicalReportRecord.doctor().getLastName()), medicalReportRecord.date(), medicalReportRecord.diagnosis(), medicalReportRecord.treatment(), medicalReportRecord.prescription(),
-                    medicalReportRecord.notes());
-            throw new MedicalReportAlreadyExistsException(format("Medical record %s %s %s already exists", format("%s %s", medicalReportRecord.patient().getFirstName(), medicalReportRecord.patient().getLastName()),
+                            medicalReportRecord.doctor().getLastName()), medicalReportRecord.date());
+            throw new MedicalReportAlreadyExistsException(format("Medical report %s %s %s already exists", format("%s %s", medicalReportRecord.patient().getFirstName(), medicalReportRecord.patient().getLastName()),
                     format("%s %s", medicalReportRecord.doctor().getFirstName(), medicalReportRecord.doctor().getLastName()), medicalReportRecord.date()), CONFLICT);
         }
         var medicalRecordSaved = medicalReportRepository.save(medicalReportRecord.toMedicalReport()).toRecord();
-        log.info("createMedicalRecord - Success: Medical record created [patient: {}, doctor: {}, date: {}, diagnosis: {}, treatment: {}, prescription: {}, notes: {}]",
+        log.info("createMedicalRecord - Success: Medical report created { patient:{}, doctor:{}, date:{} }",
                 format("%s %s", medicalReportRecord.patient().getFirstName(), medicalReportRecord.patient().getLastName()), format("%s %s", medicalReportRecord.doctor().getFirstName(),
-                        medicalReportRecord.doctor().getLastName()), medicalReportRecord.date(), medicalReportRecord.diagnosis(), medicalReportRecord.treatment(),
-                medicalReportRecord.prescription(), medicalReportRecord.notes());
+                        medicalReportRecord.doctor().getLastName()), medicalReportRecord.date());
         log.debug("createMedicalRecord - End");
         return medicalRecordSaved;
     }
 
     @Override
-    public void deleteMedicalRecord(Long medicalRecordId) {
-        log.debug("deleteMedicalRecord - Start: Attempting to delete medical record with id [{}]", medicalRecordId);
-
-        boolean medicalRecordExists = medicalReportRepository.existsById(medicalRecordId);
+    public void deleteMedicalReport(Long medicalReportId) {
+        log.debug("deleteMedicalRecord - Start: Attempting to delete medical report with id:{}", medicalReportId);
+        boolean medicalRecordExists = medicalReportRepository.existsById(medicalReportId);
         if (!medicalRecordExists) {
-            log.warn("deleteMedicalRecord - Not found: Medical record with id [{}] does not exist", medicalRecordId);
-            throw new MedicalReportNotFoundException(format("Medical record with id %s not found", medicalRecordId), NOT_FOUND);
+            log.warn("deleteMedicalRecord - Not found: Medical report with id:{} does not exist", medicalReportId);
+            throw new MedicalReportNotFoundException(format("Medical report with id %s not found", medicalReportId), NOT_FOUND);
         }
-        medicalReportRepository.deleteById(medicalRecordId);
-        log.info("deleteMedicalRecord - Success: Medical record deleted with id [{}]", medicalRecordId);
+        medicalReportRepository.deleteById(medicalReportId);
+        log.info("deleteMedicalRecord - Success: Medical report deleted with id:{}", medicalReportId);
         log.debug("deleteMedicalRecord - End");
     }
 
     @Override
-    public Page<MedicalReportRecord> getAllMedicalRecords(Pageable pageable) {
-        log.debug("getAllMedicalRecords - Start: Fetching medical records with page number [{}], page size [{}], sort: [{}]",
+    public PagingResult<MedicalReportRecord> findAllMedicalReports(PaginationRequest paginationRequest) {
+        final Pageable pageable = PaginationUtils.getPageable(paginationRequest);
+        log.debug("getAllMedicalRecords - Start: Fetching medical reports with page_number:{}, page_size:{}, sort:{}",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
-        Page<MedicalReportRecord> MedicalReportRecordS = medicalReportRepository.findAll(pageable)
+        Page<MedicalReportRecord> medicalReportRecords = medicalReportRepository.findAll(pageable)
                 .map(MedicalReport::toRecord);
-        log.info("getAllMedicalRecords - Success: Retrieved medical records [{}] (page {} of {})",
-                MedicalReportRecordS.getNumberOfElements(), MedicalReportRecordS.getNumber()+1, MedicalReportRecordS.getTotalPages() + 1);
+        log.info("getAllMedicalRecords - Success: Retrieved {} medical report(s) (page {} of {})",
+                medicalReportRecords.getNumberOfElements(), medicalReportRecords.getNumber()+1, medicalReportRecords.getTotalPages());
         log.debug("getAllMedicalRecords - End");
-        return MedicalReportRecordS;
+        return new PagingResult<MedicalReportRecord>(
+                medicalReportRecords.stream().toList(),
+                medicalReportRecords.getTotalPages(),
+                medicalReportRecords.getNumberOfElements(),
+                medicalReportRecords.getSize(),
+                medicalReportRecords.getNumber(),
+                medicalReportRecords.isEmpty()
+        );
     }
 
     @Override
-    public MedicalReportRecord getMedicalRecord(Long medicalRecordId) {
-        log.debug("getMedicalRecord - Start: Fetching medical record with id [{}]", medicalRecordId);
-        MedicalReportRecord MedicalReportRecord = medicalReportRepository.findById(medicalRecordId)
+    public MedicalReportRecord findMedicalReport(Long medicalReportId) {
+        log.debug("getMedicalRecord - Start: Fetching medical report with id:{}", medicalReportId);
+        MedicalReportRecord MedicalReportRecord = medicalReportRepository.findById(medicalReportId)
                 .map(MedicalReport::toRecord)
-                .orElseThrow(() -> new MedicalReportNotFoundException(format("Medical record with id %s not found", medicalRecordId), NOT_FOUND));
-        log.info("getMedicalRecord - Success: Retrieved medical record with id [{}]", medicalRecordId);
+                .orElseThrow(() -> new MedicalReportNotFoundException(format("Medical report with id %s not found", medicalReportId), NOT_FOUND));
+        log.info("getMedicalRecord - Success: Retrieved medical report with id:{}", medicalReportId);
         log.debug("getMedicalRecord - End");
         return MedicalReportRecord;
     }

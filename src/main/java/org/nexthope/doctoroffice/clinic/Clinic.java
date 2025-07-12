@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import org.nexthope.doctoroffice.commons.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 

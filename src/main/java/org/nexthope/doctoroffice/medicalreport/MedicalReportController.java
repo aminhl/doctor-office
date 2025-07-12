@@ -2,20 +2,20 @@ package org.nexthope.doctoroffice.medicalreport;
 
 import lombok.RequiredArgsConstructor;
 import org.nexthope.doctoroffice.commons.ApiResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.nexthope.doctoroffice.commons.PaginationRequest;
+import org.nexthope.doctoroffice.commons.PagingResult;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static java.time.Instant.now;
-import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_V1_PATH;
-import static org.nexthope.doctoroffice.medicalreport.MedicalReportConstants.*;
+import static org.nexthope.doctoroffice.medicalreport.MedicalReportConstants.MEDICAL_REPORTS_ENDPOINT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(API_V1_PATH + MEDICAL_REPORTS_ENDPOINT)
+@RequestMapping(MEDICAL_REPORTS_ENDPOINT)
 @RequiredArgsConstructor
 public class MedicalReportController {
 
@@ -23,10 +23,9 @@ public class MedicalReportController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<MedicalReportRecord>> createMedicalRecord(@RequestBody @Validated MedicalReportRecord medicalReportRecord) {
-        MedicalReportRecord MedicalReportRecord = medicalRecordService.createMedicalRecord(medicalReportRecord);
+        MedicalReportRecord MedicalReportRecord = medicalRecordService.createMedicalReport(medicalReportRecord);
         ApiResponse<MedicalReportRecord> apiResponse = ApiResponse.<MedicalReportRecord>builder()
                 .success(true)
-                .message(MEDICAL_REPORT_CREATED_MESSAGE)
                 .data(MedicalReportRecord)
                 .statusCode(CREATED)
                 .timestamp(now())
@@ -36,10 +35,9 @@ public class MedicalReportController {
 
     @DeleteMapping("/{medicalRecordId}")
     public ResponseEntity<ApiResponse<Object>> deleteMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
-        medicalRecordService.deleteMedicalRecord(medicalRecordId);
+        medicalRecordService.deleteMedicalReport(medicalRecordId);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(true)
-                .message(MEDICAL_REPORT_DELETED_MESSAGE)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();
@@ -47,11 +45,16 @@ public class MedicalReportController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<MedicalReportRecord>>> getAllMedicalRecords(Pageable pageable) {
-        Page<MedicalReportRecord> medicalRecordsDTOS = medicalRecordService.getAllMedicalRecords(pageable);
-        ApiResponse<Page<MedicalReportRecord>> apiResponse = ApiResponse.<Page<MedicalReportRecord>>builder()
+    public ResponseEntity<ApiResponse<PagingResult<MedicalReportRecord>>> findAllMedicalRecords(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) Sort.Direction direction
+    ) {
+        final PaginationRequest paginationRequest = PaginationRequest.of(page, size, sortField, direction);
+        PagingResult<MedicalReportRecord> medicalRecordsDTOS = medicalRecordService.findAllMedicalReports(paginationRequest);
+        ApiResponse<PagingResult<MedicalReportRecord>> apiResponse = ApiResponse.<PagingResult<MedicalReportRecord>>builder()
                 .success(true)
-                .message(MEDICAL_REPORTS_RETRIEVED_MESSAGE)
                 .data(medicalRecordsDTOS)
                 .statusCode(OK)
                 .timestamp(now())
@@ -60,11 +63,10 @@ public class MedicalReportController {
     }
 
     @GetMapping("/{medicalRecordId}")
-    public ResponseEntity<ApiResponse<MedicalReportRecord>> getMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
-        MedicalReportRecord MedicalReportRecord = medicalRecordService.getMedicalRecord(medicalRecordId);
+    public ResponseEntity<ApiResponse<MedicalReportRecord>> findMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
+        MedicalReportRecord MedicalReportRecord = medicalRecordService.findMedicalReport(medicalRecordId);
         ApiResponse<MedicalReportRecord> apiResponse = ApiResponse.<MedicalReportRecord>builder()
                 .success(true)
-                .message(MEDICAL_REPORT_RETRIEVED_MESSAGE)
                 .data(MedicalReportRecord)
                 .statusCode(OK)
                 .timestamp(now())

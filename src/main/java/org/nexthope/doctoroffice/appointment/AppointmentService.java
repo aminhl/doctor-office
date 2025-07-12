@@ -1,7 +1,7 @@
 package org.nexthope.doctoroffice.appointment;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.nexthope.doctoroffice.commons.PaginationRequest;
+import org.nexthope.doctoroffice.commons.PagingResult;
 
 public interface AppointmentService {
 
@@ -9,8 +9,8 @@ public interface AppointmentService {
 
     void deleteAppointment(Long appointmentId);
 
-    Page<AppointmentRecord> getAllAppointments(Pageable pageable);
+    PagingResult<AppointmentRecord> findAllAppointments(PaginationRequest paginationRequest);
 
-    AppointmentRecord getAppointment(Long appointmentId);
+    AppointmentRecord findAppointment(Long appointmentId);
 
 }

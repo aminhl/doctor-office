@@ -1,16 +1,16 @@
 package org.nexthope.doctoroffice.medicalreport;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.nexthope.doctoroffice.commons.PaginationRequest;
+import org.nexthope.doctoroffice.commons.PagingResult;
 
 public interface MedicalReportService {
 
-    MedicalReportRecord createMedicalRecord(MedicalReportRecord MedicalReportRecord);
+    MedicalReportRecord createMedicalReport(MedicalReportRecord MedicalReportRecord);
 
-    void deleteMedicalRecord(Long medicalRecordId);
+    void deleteMedicalReport(Long medicalReportId);
 
-    Page<MedicalReportRecord> getAllMedicalRecords(Pageable pageable);
+    PagingResult<MedicalReportRecord> findAllMedicalReports(PaginationRequest paginationRequest);
 
-    MedicalReportRecord getMedicalRecord(Long medicalRecordId);
+    MedicalReportRecord findMedicalReport(Long medicalReportId);
 
 }

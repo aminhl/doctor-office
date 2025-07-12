@@ -2,20 +2,20 @@ package org.nexthope.doctoroffice.appointment;
 
 import lombok.RequiredArgsConstructor;
 import org.nexthope.doctoroffice.commons.ApiResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.nexthope.doctoroffice.commons.PaginationRequest;
+import org.nexthope.doctoroffice.commons.PagingResult;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static java.time.Instant.now;
-import static org.nexthope.doctoroffice.appointment.AppointmentConstants.*;
-import static org.nexthope.doctoroffice.commons.DoctorOfficeConstants.API_V1_PATH;
+import static org.nexthope.doctoroffice.appointment.AppointmentConstants.APPOINTMENTS_ENDPOINT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(API_V1_PATH + APPOINTMENTS_ENDPOINT)
+@RequestMapping(APPOINTMENTS_ENDPOINT)
 @RequiredArgsConstructor
 public class AppointmentController {
 
@@ -26,7 +26,6 @@ public class AppointmentController {
         var appointmentSaved = appointmentService.createAppointment(appointmentRecord);
         ApiResponse<AppointmentRecord> apiResponse = ApiResponse.<AppointmentRecord>builder()
                 .success(true)
-                .message(APPOINTMENT_CREATED_MESSAGE)
                 .data(appointmentSaved)
                 .statusCode(CREATED)
                 .timestamp(now())
@@ -39,7 +38,6 @@ public class AppointmentController {
         appointmentService.deleteAppointment(appointmentId);
         ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
                 .success(true)
-                .message(APPOINTMENT_DELETED_MESSAGE)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();
@@ -47,24 +45,28 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<AppointmentRecord>>> getAllAppointments(Pageable pageable) {
-        Page<AppointmentRecord> page = appointmentService.getAllAppointments(pageable);
-        ApiResponse<Page<AppointmentRecord>> apiResponse = ApiResponse.<Page<AppointmentRecord>>builder()
+    public ResponseEntity<ApiResponse<PagingResult<AppointmentRecord>>> findAllAppointments(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false) Sort.Direction direction
+    ) {
+        final PaginationRequest paginationRequest = PaginationRequest.of(page, size, sortField, direction);
+        PagingResult<AppointmentRecord> appointmentRecords = appointmentService.findAllAppointments(paginationRequest);
+        ApiResponse<PagingResult<AppointmentRecord>> apiResponse = ApiResponse.<PagingResult<AppointmentRecord>>builder()
                 .success(true)
-                .message(APPOINTMENTS_RETRIEVED_MESSAGE)
                 .statusCode(OK)
-                .data(page)
+                .data(appointmentRecords)
                 .timestamp(now())
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @GetMapping("/{appointmentId}")
-    public ResponseEntity<ApiResponse<AppointmentRecord>> getAppointment(@PathVariable("appointmentId") Long appointmentId) {
-        AppointmentRecord appointmentRecord = appointmentService.getAppointment(appointmentId);
+    public ResponseEntity<ApiResponse<AppointmentRecord>> findAppointment(@PathVariable("appointmentId") Long appointmentId) {
+        AppointmentRecord appointmentRecord = appointmentService.findAppointment(appointmentId);
         ApiResponse<AppointmentRecord> apiResponse = ApiResponse.<AppointmentRecord>builder()
                 .success(true)
-                .message(APPOINTMENT_RETRIEVED_MESSAGE)
                 .data(appointmentRecord)
                 .statusCode(OK)
                 .timestamp(now())

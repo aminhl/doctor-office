@@ -1,7 +1,7 @@
 package org.nexthope.doctoroffice.notification;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.nexthope.doctoroffice.commons.PaginationRequest;
+import org.nexthope.doctoroffice.commons.PagingResult;
 
 public interface NotificationService {
 
@@ -9,8 +9,8 @@ public interface NotificationService {
 
     void deleteNotification(Long notificationId);
 
-    Page<NotificationRecord> getAllNotifications(Pageable pageable);
+    PagingResult<NotificationRecord> findAllNotifications(PaginationRequest paginationRequest);
 
-    NotificationRecord getNotification(Long notificationId);
+    NotificationRecord findNotification(Long notificationId);
 
 }

@@ -10,7 +10,7 @@ import java.time.Instant;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ApiResponse<T>(
         boolean success,
-        String message,
+        String errorMessage,
         HttpStatus statusCode,
         T data,
         Instant timestamp

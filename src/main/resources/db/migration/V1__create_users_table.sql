@@ -12,4 +12,4 @@ create table if not exists users
     modification_date timestamp
 );
 
--- drop table if exists users;
+-- drop table users;

@@ -15,7 +15,7 @@ alter table users add column clinic_id bigint;
 
 alter table users add constraint fk_users_clinic foreign key (clinic_id) references clinic(id);
 
--- drop table if exists clinic;
--- drop sequence if exists clinic_seq
+-- drop table clinic;
+-- drop sequence clinic_seq
 -- alter table users drop constraint fk_users_clinic;
 -- alter table users drop column clinic_id;

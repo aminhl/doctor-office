@@ -14,6 +14,5 @@ create table if not exists medical_record
     constraint fk_medical_record_doctor foreign key (doctor_id) references users (id) on delete cascade
 );
 
--- drop sequence if exists medical_record_seq;
-
--- drop table if exists medical_record;
+-- drop sequence medical_record_seq;
+-- drop table medical_record;

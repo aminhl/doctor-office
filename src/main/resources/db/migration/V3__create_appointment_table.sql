@@ -19,6 +19,6 @@ create table if not exists appointment
     modification_date timestamp
 );
 
--- drop table if exists appointment;
--- drop type if exists appointment_status;
--- drop sequence if exists appointment_seq;
+-- drop table appointment;
+-- drop type appointment_status;
+-- drop sequence appointment_seq;

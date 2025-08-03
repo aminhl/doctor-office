@@ -21,24 +21,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentRecord create(AppointmentRecord appointmentRecord) {
-        log.debug("createAppointment - Start: Attempting to create appointment { doctor:{}, patient:{}, startTime:{}, endTime:{}, status:{} }",
-                String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
-                String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
-                appointmentRecord.endTime(), appointmentRecord.status());
+        log.debug("createAppointment - Start: Attempting to create appointment");
         boolean appointmentExists = appointmentRepository.existsByDoctorAndPatientAndStartTimeAndEndTime(appointmentRecord.doctor(), appointmentRecord.patient(),
                 appointmentRecord.startTime(), appointmentRecord.endTime());
         if (appointmentExists) {
-            log.warn("createAppointment - Aborted: Appointment already exists { doctor:{}, patient:{}, startTime:{}, endTime:{}, status:{}, notes:{} }",
-                    String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
-                    String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
-                    appointmentRecord.endTime(), appointmentRecord.status(), appointmentRecord.notes());
+            log.warn("createAppointment - Aborted: Appointment already exists");
             throw new AppointmentAlreadyExistsException("Appointment already exists", CONFLICT);
         }
         var appointmentSaved = appointmentRepository.save(appointmentRecord.toAppointment()).toRecord();
-        log.info("createAppointment - Success: Appointment created { doctor: {}, patient: {}, startTime:{}, endTime:{}, status:{} }",
-                String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
-                String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
-                appointmentRecord.endTime(), appointmentRecord.status());
+        log.info("createAppointment - Success: Appointment created");
         log.debug("createAppointment - End");
         return appointmentSaved;
     }

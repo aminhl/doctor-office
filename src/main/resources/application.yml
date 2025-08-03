@@ -29,10 +29,12 @@ spring:
         jwt:
           issuer-uri: ${ISSUER_URI}
 # ============================================================================
-# Configuration OpenAPI-Docs
+# Configuration CommonsLoggingRequestFilter
 # ============================================================================
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
+logging:
+  request:
+    include-client-info: true
+    include-query-string: true
+    include-headers: false
+    include-payload: true
+    max-payload-length: 1000

@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.nexthope.doctoroffice.commons.ApiResult;
 import io.swagger.v3.oas.annotations.responses.*;
@@ -24,6 +26,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(APPOINTMENTS_ENDPOINT)
 @RequiredArgsConstructor
 @Tag(name = "Appointments", description = "Operations pertaining to appointments")
+@Validated
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -35,10 +38,10 @@ public class AppointmentController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Appointment successfully created"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required"),
-            @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content()),
+            @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content())
     })
     public ResponseEntity<ApiResult<AppointmentRecord>> create(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -66,10 +69,10 @@ public class AppointmentController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Appointment successfully deleted"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required"),
-            @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions"),
-            @ApiResponse(responseCode = "404", description = "Appointment not found"),
-            @ApiResponse(responseCode = "500", description = "Unexpected server error")
+            @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Appointment not found", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Unexpected server error", content = @Content())
     })
     @DeleteMapping(path = "/{appointmentId}")
     public ResponseEntity<ApiResult<Object>> delete(
@@ -91,17 +94,17 @@ public class AppointmentController {
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Appointments successfully retrieved"),
-        @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required"),
-        @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions"),
-        @ApiResponse(responseCode = "400", description = "Invalid request parameters"),
-        @ApiResponse(responseCode = "500", description = "Unexpected server error")
+        @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content()),
+        @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required", content = @Content()),
+        @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Unexpected server error", content = @Content())
     }
     )
     public ResponseEntity<ApiResult<PagingResult<AppointmentRecord>>> findAll(
             @Parameter(description = "Page number (starting from 0)", example = "0")
-            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) @Min(0) Integer page,
             @Parameter(description = "Page size", example = "10")
-            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) @Positive Integer size,
             @Parameter(description = "Sort field", example = "id")
             @RequestParam(required = false) String sortField,
             @Parameter(description = "Sort direction", example = "ASC")
@@ -124,10 +127,10 @@ public class AppointmentController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Appointment successfully retrieved"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required"),
-            @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions"),
-            @ApiResponse(responseCode = "404", description = "Appointment not found"),
-            @ApiResponse(responseCode = "500", description = "Unexpected server error")
+            @ApiResponse(responseCode = "401", description = "Unauthorized – authentication is required", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden – insufficient permissions", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Appointment not found", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Unexpected server error", content = @Content())
     })
     @GetMapping("/{appointmentId}")
     public ResponseEntity<ApiResult<AppointmentRecord>> find(

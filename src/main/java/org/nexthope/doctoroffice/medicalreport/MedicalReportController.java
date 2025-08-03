@@ -1,7 +1,7 @@
 package org.nexthope.doctoroffice.medicalreport;
 
 import lombok.RequiredArgsConstructor;
-import org.nexthope.doctoroffice.commons.ApiResponse;
+import org.nexthope.doctoroffice.commons.ApiResult;
 import org.nexthope.doctoroffice.commons.PaginationRequest;
 import org.nexthope.doctoroffice.commons.PagingResult;
 import org.springframework.data.domain.Sort;
@@ -22,30 +22,30 @@ public class MedicalReportController {
     private final MedicalReportService medicalRecordService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<MedicalReportRecord>> createMedicalRecord(@RequestBody @Validated MedicalReportRecord medicalReportRecord) {
+    public ResponseEntity<ApiResult<MedicalReportRecord>> createMedicalRecord(@RequestBody @Validated MedicalReportRecord medicalReportRecord) {
         MedicalReportRecord MedicalReportRecord = medicalRecordService.createMedicalReport(medicalReportRecord);
-        ApiResponse<MedicalReportRecord> apiResponse = ApiResponse.<MedicalReportRecord>builder()
+        ApiResult<MedicalReportRecord> apiResult = ApiResult.<MedicalReportRecord>builder()
                 .success(true)
                 .data(MedicalReportRecord)
                 .statusCode(CREATED)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.status(CREATED).body(apiResponse);
+        return ResponseEntity.status(CREATED).body(apiResult);
     }
 
     @DeleteMapping("/{medicalRecordId}")
-    public ResponseEntity<ApiResponse<Object>> deleteMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
+    public ResponseEntity<ApiResult<Object>> deleteMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
         medicalRecordService.deleteMedicalReport(medicalRecordId);
-        ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
+        ApiResult<Object> apiResult = ApiResult.<Object>builder()
                 .success(true)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok(apiResult);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<PagingResult<MedicalReportRecord>>> findAllMedicalRecords(
+    public ResponseEntity<ApiResult<PagingResult<MedicalReportRecord>>> findAllMedicalRecords(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) String sortField,
@@ -53,25 +53,25 @@ public class MedicalReportController {
     ) {
         final PaginationRequest paginationRequest = PaginationRequest.of(page, size, sortField, direction);
         PagingResult<MedicalReportRecord> medicalRecordsDTOS = medicalRecordService.findAllMedicalReports(paginationRequest);
-        ApiResponse<PagingResult<MedicalReportRecord>> apiResponse = ApiResponse.<PagingResult<MedicalReportRecord>>builder()
+        ApiResult<PagingResult<MedicalReportRecord>> apiResult = ApiResult.<PagingResult<MedicalReportRecord>>builder()
                 .success(true)
                 .data(medicalRecordsDTOS)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok(apiResult);
     }
 
     @GetMapping("/{medicalRecordId}")
-    public ResponseEntity<ApiResponse<MedicalReportRecord>> findMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
+    public ResponseEntity<ApiResult<MedicalReportRecord>> findMedicalRecord(@PathVariable("medicalRecordId") Long medicalRecordId) {
         MedicalReportRecord MedicalReportRecord = medicalRecordService.findMedicalReport(medicalRecordId);
-        ApiResponse<MedicalReportRecord> apiResponse = ApiResponse.<MedicalReportRecord>builder()
+        ApiResult<MedicalReportRecord> apiResult = ApiResult.<MedicalReportRecord>builder()
                 .success(true)
                 .data(MedicalReportRecord)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok(apiResult);
     }
 
 }

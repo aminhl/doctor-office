@@ -20,7 +20,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
 
     @Override
-    public AppointmentRecord createAppointment(AppointmentRecord appointmentRecord) {
+    public AppointmentRecord create(AppointmentRecord appointmentRecord) {
         log.debug("createAppointment - Start: Attempting to create appointment { doctor:{}, patient:{}, startTime:{}, endTime:{}, status:{} }",
                 String.format("%s %s", appointmentRecord.doctor().getFirstName(), appointmentRecord.doctor().getLastName()),
                 String.format("%s %s", appointmentRecord.patient().getFirstName(), appointmentRecord.patient().getLastName()), appointmentRecord.startTime(),
@@ -44,7 +44,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void deleteAppointment(Long appointmentId) {
+    public void delete(Long appointmentId) {
         log.debug("deleteAppointment - Start : Attempting to delete appointment with id:{}", appointmentId);
         boolean appointmentExists = appointmentRepository.existsById(appointmentId);
         if (!appointmentExists) {
@@ -57,7 +57,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public PagingResult<AppointmentRecord> findAllAppointments(PaginationRequest paginationRequest) {
+    public PagingResult<AppointmentRecord> findAll(PaginationRequest paginationRequest) {
         final Pageable pageable = PaginationUtils.getPageable(paginationRequest);
         log.debug("getAllAppointments - Start: Fetching appointments with page_number:{}, page_size:{}, sort:{}",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
@@ -77,7 +77,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentRecord findAppointment(Long appointmentId) {
+    public AppointmentRecord find(Long appointmentId) {
         log.debug("getAppointment - Start: Fetching appointment with id:{}", appointmentId);
         AppointmentRecord result = appointmentRepository.findById(appointmentId)
                 .map(Appointment::toRecord)

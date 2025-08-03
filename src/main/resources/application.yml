@@ -1,0 +1,38 @@
+spring:
+  # ============================================================================
+  # Configuration de la source de donnees et de JPA pour PostgreSQL
+  # ============================================================================
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  # ============================================================================
+  # Configuration Flyway
+  # ============================================================================
+  flyway:
+    enabled: true
+    baseline-version: 0
+    baseline-on-migrate: true
+  # ============================================================================
+  # Configuration OAuth2 (Keycloak)
+  # ============================================================================
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI}
+# ============================================================================
+# Configuration OpenAPI-Docs
+# ============================================================================
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

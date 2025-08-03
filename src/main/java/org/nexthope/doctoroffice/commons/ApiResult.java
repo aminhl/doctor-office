@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record ApiResponse<T>(
+public record ApiResult<T>(
         boolean success,
         String errorMessage,
         HttpStatus statusCode,

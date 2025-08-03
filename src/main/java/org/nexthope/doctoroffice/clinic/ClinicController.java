@@ -1,7 +1,7 @@
 package org.nexthope.doctoroffice.clinic;
 
 import lombok.RequiredArgsConstructor;
-import org.nexthope.doctoroffice.commons.ApiResponse;
+import org.nexthope.doctoroffice.commons.ApiResult;
 import org.nexthope.doctoroffice.commons.PaginationRequest;
 import org.nexthope.doctoroffice.commons.PagingResult;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,30 +22,30 @@ public class ClinicController {
     private final ClinicService clinicService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ClinicRecord>> createClinic(@RequestBody @Validated ClinicRecord clinicRecord) {
+    public ResponseEntity<ApiResult<ClinicRecord>> createClinic(@RequestBody @Validated ClinicRecord clinicRecord) {
         var clinicSaved = clinicService.createClinic(clinicRecord);
-        ApiResponse<ClinicRecord> apiResponse = ApiResponse.<ClinicRecord>builder()
+        ApiResult<ClinicRecord> apiResult = ApiResult.<ClinicRecord>builder()
                 .success(true)
                 .data(clinicSaved)
                 .statusCode(CREATED)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.status(CREATED).body(apiResponse);
+        return ResponseEntity.status(CREATED).body(apiResult);
     }
 
     @DeleteMapping("/{clinicId}")
-    public ResponseEntity<ApiResponse<Object>> deleteClinic(@PathVariable Long clinicId) {
+    public ResponseEntity<ApiResult<Object>> deleteClinic(@PathVariable Long clinicId) {
         clinicService.deleteClinic(clinicId);
-        ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
+        ApiResult<Object> apiResult = ApiResult.<Object>builder()
                 .success(true)
                 .statusCode(OK)
                 .timestamp(now())
                 .build();
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok(apiResult);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<PagingResult<ClinicRecord>>> findAllClinics(
+    public ResponseEntity<ApiResult<PagingResult<ClinicRecord>>> findAllClinics(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) String sortField,
@@ -53,7 +53,7 @@ public class ClinicController {
             ) {
         final PaginationRequest paginationRequest = PaginationRequest.of(page, size, sortField, direction);
         PagingResult<ClinicRecord> clinicRecords = clinicService.findAllClinics(paginationRequest);
-        ApiResponse<PagingResult<ClinicRecord>> response = ApiResponse.<PagingResult<ClinicRecord>>builder()
+        ApiResult<PagingResult<ClinicRecord>> response = ApiResult.<PagingResult<ClinicRecord>>builder()
                 .success(true)
                 .statusCode(OK)
                 .data(clinicRecords)
@@ -63,9 +63,9 @@ public class ClinicController {
     }
 
     @GetMapping("/{clinicId}")
-    public ResponseEntity<ApiResponse<ClinicRecord>> findClinic(@PathVariable("clinicId") Long clinicId) {
+    public ResponseEntity<ApiResult<ClinicRecord>> findClinic(@PathVariable("clinicId") Long clinicId) {
         ClinicRecord clinic = clinicService.findClinic(clinicId);
-        ApiResponse<ClinicRecord> response = ApiResponse.<ClinicRecord>builder()
+        ApiResult<ClinicRecord> response = ApiResult.<ClinicRecord>builder()
                 .success(true)
                 .statusCode(OK)
                 .data(clinic)

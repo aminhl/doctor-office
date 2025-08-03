@@ -5,12 +5,12 @@ import org.nexthope.doctoroffice.commons.PagingResult;
 
 public interface AppointmentService {
 
-    AppointmentRecord createAppointment(AppointmentRecord appointmentRecord);
+    AppointmentRecord create(AppointmentRecord appointmentRecord);
 
-    void deleteAppointment(Long appointmentId);
+    void delete(Long appointmentId);
 
-    PagingResult<AppointmentRecord> findAllAppointments(PaginationRequest paginationRequest);
+    PagingResult<AppointmentRecord> findAll(PaginationRequest paginationRequest);
 
-    AppointmentRecord findAppointment(Long appointmentId);
+    AppointmentRecord find(Long appointmentId);
 
 }

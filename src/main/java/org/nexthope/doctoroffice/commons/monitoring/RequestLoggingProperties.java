@@ -1,4 +1,4 @@
-package org.nexthope.doctoroffice.commons;
+package org.nexthope.doctoroffice.commons.monitoring;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

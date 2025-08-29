@@ -1,4 +1,4 @@
-package org.nexthope.doctoroffice.commons;
+package org.nexthope.doctoroffice.commons.monitoring;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;

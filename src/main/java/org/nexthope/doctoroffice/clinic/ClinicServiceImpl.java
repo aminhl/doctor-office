@@ -2,9 +2,9 @@ package org.nexthope.doctoroffice.clinic;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nexthope.doctoroffice.commons.PaginationRequest;
-import org.nexthope.doctoroffice.commons.PaginationUtils;
-import org.nexthope.doctoroffice.commons.PagingResult;
+import org.nexthope.doctoroffice.commons.pagination.PaginationRequest;
+import org.nexthope.doctoroffice.commons.pagination.PaginationUtils;
+import org.nexthope.doctoroffice.commons.pagination.PagingResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,24 +20,24 @@ public class ClinicServiceImpl implements ClinicService {
     private final ClinicRepository clinicRepository;
 
     @Override
-    public ClinicRecord createClinic(ClinicRecord clinicRecord) {
+    public ClinicDTO create(ClinicDTO clinicDTO) {
         log.debug("createClinic - Start: Attempting to create clinic: name:{}, address:{}, city:{}",
-                clinicRecord.name(), clinicRecord.address(), clinicRecord.city());
+                clinicDTO.name(), clinicDTO.address(), clinicDTO.city());
         boolean clinicExists = clinicRepository.existsByNameAndAddressAndCity(
-                clinicRecord.name(), clinicRecord.address(), clinicRecord.city());
+                clinicDTO.name(), clinicDTO.address(), clinicDTO.city());
         if (clinicExists) {
             log.warn("createClinic - Aborted: Clinic already exists name:{}, address:{}, city:{}",
-                    clinicRecord.name(), clinicRecord.address(), clinicRecord.city());
-            throw new ClinicAlreadyExistsException("Clinic " + clinicRecord.name() + " already exists", CONFLICT);
+                    clinicDTO.name(), clinicDTO.address(), clinicDTO.city());
+            throw new ClinicAlreadyExistsException("Clinic " + clinicDTO.name() + " already exists", CONFLICT);
         }
-        var clinicSaved = clinicRepository.save(clinicRecord.toClinic()).toRecord();
-        log.info("createClinic - Success: Clinic created name:{}", clinicRecord.name());
+        var clinicSaved = clinicRepository.save(clinicDTO.toClinic()).toRecord();
+        log.info("createClinic - Success: Clinic created name:{}", clinicDTO.name());
         log.debug("createClinic - End");
         return clinicSaved;
     }
 
     @Override
-    public void deleteClinic(Long clinicId) {
+    public void delete(Long clinicId) {
         log.debug("deleteClinic - Start: Attempting to delete clinic with id:{}", clinicId);
         boolean clinicExists = clinicRepository.existsById(clinicId);
         if (!clinicExists) {
@@ -50,16 +50,16 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
-    public PagingResult<ClinicRecord> findAllClinics(PaginationRequest paginationRequest) {
+    public PagingResult<ClinicDTO> findAll(PaginationRequest paginationRequest) {
         final Pageable pageable = PaginationUtils.getPageable(paginationRequest);
         log.info("getAllClinics - Start: Fetching clinics with page-number:{}, page-size:{}, sort:{}",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
-        Page<ClinicRecord> clinicsRecords = clinicRepository.findAll(pageable)
+        Page<ClinicDTO> clinicsRecords = clinicRepository.findAll(pageable)
                 .map(Clinic::toRecord);
         log.info("getAllClinics - Success: Retrieved:{} clinic(s) (page:{} of:{})",
                 clinicsRecords.getNumberOfElements(), clinicsRecords.getNumber()+1, clinicsRecords.getTotalPages());
         log.debug("getAllClinics - End");
-        return new PagingResult<ClinicRecord>(
+        return new PagingResult<>(
                 clinicsRecords.stream().toList(),
                 clinicsRecords.getTotalPages(),
                 clinicsRecords.getTotalElements(),
@@ -70,9 +70,9 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
-    public ClinicRecord findClinic(Long clinicId) {
+    public ClinicDTO find(Long clinicId) {
         log.debug("getClinic - Start: Fetching clinic with id:{}", clinicId);
-        ClinicRecord result = clinicRepository.findById(clinicId)
+        ClinicDTO result = clinicRepository.findById(clinicId)
                 .map(Clinic::toRecord)
                 .orElseThrow(() -> new ClinicNotFoundException("Clinic with id " + clinicId + " not found", NOT_FOUND));
         log.info("getClinic - Success: Retrieved clinic with id:{}", clinicId);

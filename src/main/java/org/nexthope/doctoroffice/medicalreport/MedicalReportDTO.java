@@ -5,7 +5,7 @@ import org.nexthope.doctoroffice.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public record MedicalReportRecord(
+public record MedicalReportDTO(
         Long id,
         User patient, // TODO: UserRecord
         User doctor, // TODO: UserRecord

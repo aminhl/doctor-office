@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.nexthope.doctoroffice.commons.BaseAudit;
+import org.nexthope.doctoroffice.commons.monitoring.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
 import java.time.LocalDateTime;
@@ -66,8 +66,8 @@ public class Appointment extends BaseAudit {
         return this;
     }
 
-    public AppointmentRecord toRecord() {
-        return new AppointmentRecord(id, doctor, patient, startTime, endTime, notes, status, getCreationDate(), getModificationDate());
+    public AppointmentDTO toRecord() {
+        return new AppointmentDTO(id, doctor, patient, startTime, endTime, notes, status, getCreationDate(), getModificationDate());
     }
 
 }

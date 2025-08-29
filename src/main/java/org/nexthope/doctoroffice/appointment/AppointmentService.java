@@ -1,16 +1,16 @@
 package org.nexthope.doctoroffice.appointment;
 
-import org.nexthope.doctoroffice.commons.PaginationRequest;
-import org.nexthope.doctoroffice.commons.PagingResult;
+import org.nexthope.doctoroffice.commons.pagination.PaginationRequest;
+import org.nexthope.doctoroffice.commons.pagination.PagingResult;
 
 public interface AppointmentService {
 
-    AppointmentRecord create(AppointmentRecord appointmentRecord);
+    AppointmentDTO create(AppointmentDTO appointmentDTO);
 
     void delete(Long appointmentId);
 
-    PagingResult<AppointmentRecord> findAll(PaginationRequest paginationRequest);
+    PagingResult<AppointmentDTO> findAll(PaginationRequest paginationRequest);
 
-    AppointmentRecord find(Long appointmentId);
+    AppointmentDTO find(Long appointmentId);
 
 }

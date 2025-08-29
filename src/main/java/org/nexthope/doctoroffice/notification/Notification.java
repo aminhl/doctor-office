@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.nexthope.doctoroffice.commons.BaseAudit;
+import org.nexthope.doctoroffice.commons.monitoring.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
 import java.time.LocalDateTime;
@@ -59,8 +59,8 @@ public class Notification extends BaseAudit {
         return this;
     }
 
-    public NotificationRecord toRecord() {
-        return new NotificationRecord(id, subject, content, isSent, recipient, getCreationDate(), getModificationDate());
+    public NotificationDTO toRecord() {
+        return new NotificationDTO(id, subject, content, isSent, recipient, getCreationDate(), getModificationDate());
     }
 
 }

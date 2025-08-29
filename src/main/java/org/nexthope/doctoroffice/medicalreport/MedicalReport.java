@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.nexthope.doctoroffice.commons.BaseAudit;
+import org.nexthope.doctoroffice.commons.monitoring.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
 import java.time.LocalDate;
@@ -69,8 +69,8 @@ public class MedicalReport extends BaseAudit {
         return this;
     }
 
-    public MedicalReportRecord toRecord() {
-        return new MedicalReportRecord(id, patient, doctor, date, diagnosis, treatment, prescription, notes, getCreationDate(), getModificationDate());
+    public MedicalReportDTO toRecord() {
+        return new MedicalReportDTO(id, patient, doctor, date, diagnosis, treatment, prescription, notes, getCreationDate(), getModificationDate());
     }
 
 }

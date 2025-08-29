@@ -2,8 +2,8 @@ package org.nexthope.doctoroffice.clinic;
 
 import lombok.RequiredArgsConstructor;
 import org.nexthope.doctoroffice.commons.ApiResult;
-import org.nexthope.doctoroffice.commons.PaginationRequest;
-import org.nexthope.doctoroffice.commons.PagingResult;
+import org.nexthope.doctoroffice.commons.pagination.PaginationRequest;
+import org.nexthope.doctoroffice.commons.pagination.PagingResult;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import static java.time.Instant.now;
 import static org.nexthope.doctoroffice.clinic.ClinicConstants.*;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(CLINICS_ENDPOINT)
@@ -22,54 +21,46 @@ public class ClinicController {
     private final ClinicService clinicService;
 
     @PostMapping
-    public ResponseEntity<ApiResult<ClinicRecord>> createClinic(@RequestBody @Validated ClinicRecord clinicRecord) {
-        var clinicSaved = clinicService.createClinic(clinicRecord);
-        ApiResult<ClinicRecord> apiResult = ApiResult.<ClinicRecord>builder()
+    public ResponseEntity<ApiResult<ClinicDTO>> create(@RequestBody @Validated ClinicDTO clinicDTO) {
+        var clinicSaved = clinicService.create(clinicDTO);
+        ApiResult<ClinicDTO> apiResult = ApiResult.<ClinicDTO>builder()
                 .success(true)
-                .data(clinicSaved)
-                .statusCode(CREATED)
                 .timestamp(now())
+                .data(clinicSaved)
                 .build();
         return ResponseEntity.status(CREATED).body(apiResult);
     }
 
     @DeleteMapping("/{clinicId}")
-    public ResponseEntity<ApiResult<Object>> deleteClinic(@PathVariable Long clinicId) {
-        clinicService.deleteClinic(clinicId);
-        ApiResult<Object> apiResult = ApiResult.<Object>builder()
-                .success(true)
-                .statusCode(OK)
-                .timestamp(now())
-                .build();
-        return ResponseEntity.ok(apiResult);
+    public ResponseEntity<Void> delete(@PathVariable Long clinicId) {
+        clinicService.delete(clinicId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<ApiResult<PagingResult<ClinicRecord>>> findAllClinics(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) String sortField,
-            @RequestParam(required = false) Direction direction
+    public ResponseEntity<ApiResult<PagingResult<ClinicDTO>>> findAll(
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "10", required = false) Integer size,
+            @RequestParam(defaultValue = "DESC", required = false) Direction direction,
+            @RequestParam(defaultValue = "id", required = false) String sortField
             ) {
-        final PaginationRequest paginationRequest = PaginationRequest.of(page, size, sortField, direction);
-        PagingResult<ClinicRecord> clinicRecords = clinicService.findAllClinics(paginationRequest);
-        ApiResult<PagingResult<ClinicRecord>> response = ApiResult.<PagingResult<ClinicRecord>>builder()
+        final PaginationRequest paginationRequest = PaginationRequest.of(page, size, direction, sortField);
+        PagingResult<ClinicDTO> clinicRecords = clinicService.findAll(paginationRequest);
+        ApiResult<PagingResult<ClinicDTO>> response = ApiResult.<PagingResult<ClinicDTO>>builder()
                 .success(true)
-                .statusCode(OK)
-                .data(clinicRecords)
                 .timestamp(now())
+                .data(clinicRecords)
                 .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{clinicId}")
-    public ResponseEntity<ApiResult<ClinicRecord>> findClinic(@PathVariable("clinicId") Long clinicId) {
-        ClinicRecord clinic = clinicService.findClinic(clinicId);
-        ApiResult<ClinicRecord> response = ApiResult.<ClinicRecord>builder()
+    public ResponseEntity<ApiResult<ClinicDTO>> find(@PathVariable("clinicId") Long clinicId) {
+        ClinicDTO clinic = clinicService.find(clinicId);
+        ApiResult<ClinicDTO> response = ApiResult.<ClinicDTO>builder()
                 .success(true)
-                .statusCode(OK)
-                .data(clinic)
                 .timestamp(now())
+                .data(clinic)
                 .build();
         return ResponseEntity.ok(response);
     }

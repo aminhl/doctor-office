@@ -1,4 +1,4 @@
-package org.nexthope.doctoroffice.commons;
+package org.nexthope.doctoroffice.commons.pagination;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

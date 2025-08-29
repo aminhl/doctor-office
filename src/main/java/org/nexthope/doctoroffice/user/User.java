@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.nexthope.doctoroffice.clinic.Clinic;
-import org.nexthope.doctoroffice.commons.BaseAudit;
+import org.nexthope.doctoroffice.commons.monitoring.BaseAudit;
 
 import java.util.Objects;
 

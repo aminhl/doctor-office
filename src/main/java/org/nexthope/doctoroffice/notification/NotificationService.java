@@ -1,16 +1,16 @@
 package org.nexthope.doctoroffice.notification;
 
-import org.nexthope.doctoroffice.commons.PaginationRequest;
-import org.nexthope.doctoroffice.commons.PagingResult;
+import org.nexthope.doctoroffice.commons.pagination.PaginationRequest;
+import org.nexthope.doctoroffice.commons.pagination.PagingResult;
 
 public interface NotificationService {
 
-    NotificationRecord createNotification(NotificationRecord notificationRecord);
+    NotificationDTO create(NotificationDTO notificationDTO);
 
-    void deleteNotification(Long notificationId);
+    void delete(Long notificationId);
 
-    PagingResult<NotificationRecord> findAllNotifications(PaginationRequest paginationRequest);
+    PagingResult<NotificationDTO> findAll(PaginationRequest paginationRequest);
 
-    NotificationRecord findNotification(Long notificationId);
+    NotificationDTO find(Long notificationId);
 
 }

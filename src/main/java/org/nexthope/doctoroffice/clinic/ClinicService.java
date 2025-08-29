@@ -1,18 +1,16 @@
 package org.nexthope.doctoroffice.clinic;
 
-import org.nexthope.doctoroffice.commons.PaginationRequest;
-import org.nexthope.doctoroffice.commons.PagingResult;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.nexthope.doctoroffice.commons.pagination.PaginationRequest;
+import org.nexthope.doctoroffice.commons.pagination.PagingResult;
 
 public interface ClinicService {
 
-    ClinicRecord createClinic(ClinicRecord clinicRecord);
+    ClinicDTO create(ClinicDTO clinicDTO);
 
-    void deleteClinic(Long clinicId);
+    void delete(Long clinicId);
 
-    PagingResult<ClinicRecord> findAllClinics(PaginationRequest paginationRequest);
+    PagingResult<ClinicDTO> findAll(PaginationRequest paginationRequest);
 
-    ClinicRecord findClinic(Long clinicId);
+    ClinicDTO find(Long clinicId);
 
 }

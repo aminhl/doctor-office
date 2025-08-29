@@ -1,4 +1,4 @@
-package org.nexthope.doctoroffice.commons;
+package org.nexthope.doctoroffice.commons.monitoring;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

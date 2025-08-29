@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
-import org.nexthope.doctoroffice.commons.BaseAudit;
+import org.nexthope.doctoroffice.commons.monitoring.BaseAudit;
 import org.nexthope.doctoroffice.user.User;
 
 import java.time.LocalDateTime;
@@ -67,8 +66,8 @@ public class Clinic extends BaseAudit {
         return this;
     }
 
-    public ClinicRecord toRecord() {
-        return new ClinicRecord(id, name, address, city, phoneNumber, getCreationDate(), getModificationDate());
+    public ClinicDTO toRecord() {
+        return new ClinicDTO(id, name, address, city, phoneNumber, getCreationDate(), getModificationDate());
     }
 
 }

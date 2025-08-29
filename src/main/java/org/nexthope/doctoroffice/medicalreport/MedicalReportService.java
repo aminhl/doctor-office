@@ -1,16 +1,16 @@
 package org.nexthope.doctoroffice.medicalreport;
 
-import org.nexthope.doctoroffice.commons.PaginationRequest;
-import org.nexthope.doctoroffice.commons.PagingResult;
+import org.nexthope.doctoroffice.commons.pagination.PaginationRequest;
+import org.nexthope.doctoroffice.commons.pagination.PagingResult;
 
 public interface MedicalReportService {
 
-    MedicalReportRecord createMedicalReport(MedicalReportRecord MedicalReportRecord);
+    MedicalReportDTO create(MedicalReportDTO MedicalReportDTO);
 
-    void deleteMedicalReport(Long medicalReportId);
+    void delete(Long medicalReportId);
 
-    PagingResult<MedicalReportRecord> findAllMedicalReports(PaginationRequest paginationRequest);
+    PagingResult<MedicalReportDTO> findAll(PaginationRequest paginationRequest);
 
-    MedicalReportRecord findMedicalReport(Long medicalReportId);
+    MedicalReportDTO find(Long medicalReportId);
 
 }
